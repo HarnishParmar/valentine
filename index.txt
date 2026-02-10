@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Will you be my Valentine? 💘</title>
+  <style>
+    :root{
+      --bg1:#ffdde1;
+      --bg2:#ee9ca7;
+      --card:#ffffffcc;
+      --text:#2b2b2b;
+      --yes:#ff4d6d;
+      --no:#6c757d;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: radial-gradient(circle at top, var(--bg1), var(--bg2));
+      overflow:hidden;
+    }
+    .wrap{
+      width:min(680px, 92vw);
+      padding:24px;
+      position:relative;
+      z-index:2;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid #ffffff66;
+      backdrop-filter: blur(8px);
+      border-radius:24px;
+      padding:28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      text-align:center;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      letter-spacing:.2px;
+    }
+    p{
+      margin:10px 0 18px;
+      font-size: clamp(15px, 2.2vw, 18px);
+      line-height:1.45;
+    }
+    .names{
+      font-weight:650;
+    }
+    .actions{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+    button{
+      border:0;
+      padding:14px 20px;
+      border-radius:999px;
+      font-size:16px;
+      font-weight:650;
+      cursor:pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,.12);
+      transition: transform .08s ease, filter .15s ease;
+      user-select:none;
+    }
+    button:active{ transform: translateY(1px) scale(.99); }
+    .yes{ background:var(--yes); color:white; }
+    .yes:hover{ filter:brightness(1.05); }
+    .no{
+      background:var(--no);
+      color:white;
+      position:relative;
+    }
+
+    .tiny{
+      opacity:.85;
+      font-size:13px;
+      margin-top:10px;
+    }
+
+    /* Success screen */
+    .success{
+      display:none;
+      animation: pop .35s ease both;
+    }
+    @keyframes pop{
+      from{ transform: scale(.96); opacity:.2;}
+      to{ transform: scale(1); opacity:1;}
+    }
+
+    /* Floating hearts */
+    .heart{
+      position:absolute;
+      font-size:18px;
+      animation: floatUp linear forwards;
+      opacity:.9;
+      z-index:1;
+      pointer-events:none;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.12));
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0;}
+      10%{opacity:.9;}
+      to{ transform: translateY(-120vh) translateX(var(--drift)) rotate(20deg); opacity:0;}
+    }
+
+    /* Cute footer badge */
+    .badge{
+      margin-top:18px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:#ffffffaa;
+      border:1px solid #ffffff66;
+      font-size:13px;
+    }
+    input{
+      border-radius:999px;
+      border:1px solid #ddd;
+      padding:10px 12px;
+      font-size:14px;
+      width:min(240px, 80vw);
+      outline:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="askCard">
+      <h1>Will you be my Valentine? 💘</h1>
+      <p>
+        Hey <span class="names" id="herNamePreview">my love</span>, I made this just for you.
+        <br/>One question only… 💞
+      </p>
+
+      <div class="badge">
+        Personalize:
+        <input id="herName" placeholder="Her name (optional)" />
+      </div>
+
+      <div class="actions" style="margin-top:22px;">
+        <button class="yes" id="yesBtn">Yes 💖</button>
+        <button class="no" id="noBtn">No 🙈</button>
+      </div>
+      <div class="tiny">Tip: try pressing “No” 😄</div>
+    </div>
+
+    <div class="card success" id="successCard">
+      <h1>YAY!!! 🎉💞</h1>
+      <p>
+        <span class="names" id="herNameSuccess">My love</span>, you just made my day.
+        <br/>Happy Valentine’s Day! 🌹
+      </p>
+      <p class="tiny">Screenshot this and send it to me 😉</p>
+      <div class="actions">
+        <button class="yes" id="againBtn">Replay 💘</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const herName = document.getElementById('herName');
+    const herNamePreview = document.getElementById('herNamePreview');
+    const herNameSuccess = document.getElementById('herNameSuccess');
+
+    const askCard = document.getElementById('askCard');
+    const successCard = document.getElementById('successCard');
+
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const againBtn = document.getElementById('againBtn');
+
+    function setName(){
+      const name = (herName.value || '').trim();
+      const pretty = name ? name : 'my love';
+      herNamePreview.textContent = pretty;
+      herNameSuccess.textContent = pretty;
+    }
+    herName.addEventListener('input', setName);
+    setName();
+
+    // Floating hearts generator
+    function spawnHearts(count = 18){
+      const emojis = ["💖","💘","💗","💓","💞","🌹","✨"];
+      for(let i=0;i<count;i++){
+        const el = document.createElement('div');
+        el.className = 'heart';
+        el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        el.style.left = Math.random()*100 + 'vw';
+        el.style.bottom = (-10 - Math.random()*20) + 'vh';
+        el.style.fontSize = (14 + Math.random()*22) + 'px';
+        el.style.setProperty('--drift', (Math.random()*120 - 60) + 'px');
+        el.style.animationDuration = (3.8 + Math.random()*3.2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 8000);
+      }
+    }
+
+    // Make "No" button run away playfully
+    function moveNoButton(){
+      const padding = 16;
+      const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = vw - btnRect.width - padding;
+      const maxY = vh - btnRect.height - padding;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+      noBtn.style.zIndex = 9999;
+
+      // tiny hearts when it escapes
+      spawnHearts(6);
+    }
+
+    // Different triggers for desktop/mobile
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); }, {passive:false});
+    noBtn.addEventListener('click', moveNoButton);
+
+    yesBtn.addEventListener('click', () => {
+      spawnHearts(40);
+      askCard.style.display = 'none';
+      successCard.style.display = 'block';
+    });
+
+    againBtn.addEventListener('click', () => {
+      successCard.style.display = 'none';
+      askCard.style.display = 'block';
+      // reset no button position
+      noBtn.style.position = 'relative';
+      noBtn.style.left = '';
+      noBtn.style.top = '';
+      spawnHearts(12);
+    });
+
+    // ambient hearts
+    setInterval(() => spawnHearts(2), 1200);
+  </script>
+</body>
+</html>
