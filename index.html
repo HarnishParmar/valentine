@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Will you be my Valentine? 💘</title>
+  <title>Abby, will you be my Valentine? 💘</title>
   <style>
     :root{
-      --bg1:#ffdde1;
-      --bg2:#ee9ca7;
-      --card:#ffffffcc;
-      --text:#2b2b2b;
-      --yes:#ff4d6d;
+      --bg1:#ffd1dc;
+      --bg2:#ff7aa2;
+      --card:#ffffffd9;
+      --text:#222;
+      --yes:#ff3b6b;
       --no:#6c757d;
     }
     *{box-sizing:border-box}
@@ -25,72 +25,47 @@
       background: radial-gradient(circle at top, var(--bg1), var(--bg2));
       overflow:hidden;
     }
-    .wrap{
-      width:min(680px, 92vw);
-      padding:24px;
-      position:relative;
-      z-index:2;
-    }
+    .wrap{ width:min(720px, 92vw); padding:24px; position:relative; z-index:2; }
     .card{
       background:var(--card);
-      border:1px solid #ffffff66;
-      backdrop-filter: blur(8px);
-      border-radius:24px;
-      padding:28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.15);
+      border:1px solid #ffffff80;
+      backdrop-filter: blur(10px);
+      border-radius:28px;
+      padding:30px 26px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.18);
       text-align:center;
     }
-    h1{
-      margin:0 0 8px;
-      font-size: clamp(28px, 4vw, 44px);
-      letter-spacing:.2px;
-    }
-    p{
-      margin:10px 0 18px;
-      font-size: clamp(15px, 2.2vw, 18px);
-      line-height:1.45;
-    }
-    .names{
-      font-weight:650;
-    }
-    .actions{
-      display:flex;
-      gap:14px;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
+    h1{ margin:0 0 10px; font-size:clamp(28px,4.2vw,46px); }
+    p{ margin:10px 0 18px; font-size:clamp(15px,2.2vw,18px); line-height:1.5; }
+    .name{ font-weight:800; }
+    .actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
     button{
       border:0;
-      padding:14px 20px;
+      padding:14px 22px;
       border-radius:999px;
       font-size:16px;
-      font-weight:650;
+      font-weight:750;
       cursor:pointer;
-      box-shadow: 0 10px 20px rgba(0,0,0,.12);
+      box-shadow: 0 12px 22px rgba(0,0,0,.14);
       transition: transform .08s ease, filter .15s ease;
       user-select:none;
+      touch-action: manipulation;
     }
     button:active{ transform: translateY(1px) scale(.99); }
     .yes{ background:var(--yes); color:white; }
     .yes:hover{ filter:brightness(1.05); }
+
+    /* The runaway "No" button (initially in normal flow) */
     .no{
       background:var(--no);
       color:white;
       position:relative;
     }
 
-    .tiny{
-      opacity:.85;
-      font-size:13px;
-      margin-top:10px;
-    }
+    .hint{ margin-top:12px; font-size:13px; opacity:.85; }
 
-    /* Success screen */
-    .success{
-      display:none;
-      animation: pop .35s ease both;
-    }
+    /* Success */
+    .success{ display:none; animation: pop .35s ease both; }
     @keyframes pop{
       from{ transform: scale(.96); opacity:.2;}
       to{ transform: scale(1); opacity:1;}
@@ -109,149 +84,179 @@
     @keyframes floatUp{
       from{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0;}
       10%{opacity:.9;}
-      to{ transform: translateY(-120vh) translateX(var(--drift)) rotate(20deg); opacity:0;}
-    }
-
-    /* Cute footer badge */
-    .badge{
-      margin-top:18px;
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      background:#ffffffaa;
-      border:1px solid #ffffff66;
-      font-size:13px;
-    }
-    input{
-      border-radius:999px;
-      border:1px solid #ddd;
-      padding:10px 12px;
-      font-size:14px;
-      width:min(240px, 80vw);
-      outline:none;
+      to{ transform: translateY(-120vh) translateX(var(--drift)) rotate(25deg); opacity:0;}
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card" id="askCard">
-      <h1>Will you be my Valentine? 💘</h1>
+      <h1><span class="name">Abby</span>, will you be my Valentine? 💘</h1>
       <p>
-        Hey <span class="names" id="herNamePreview">my love</span>, I made this just for you.
-        <br/>One question only… 💞
+        I made this little page just for you. <br/>
+        One question only… 💞
       </p>
 
-      <div class="badge">
-        Abegail
-        <input id="" placeholder="" />
+      <div class="actions">
+        <button class="yes" id="yesBtn">Yes 💖</button>
+        <button class="no" id="noBtn" aria-label="No button">No 🙈</button>
       </div>
 
-      <div class="actions" style="margin-top:22px;">
-        <button class="yes" id="yesBtn">Yes 💖</button>
-        <button class="no" id="noBtn">No 🙈</button>
-      </div>
-      <div class="tiny">Tip: try pressing “No” 😄</div>
+      <div class="hint">Try pressing “No”… if you can 😄</div>
     </div>
 
     <div class="card success" id="successCard">
       <h1>YAY!!! 🎉💞</h1>
       <p>
-        <span class="names" id="herNameSuccess">My love</span>, you just made my day.
-        <br/>Happy Valentine’s Day! 🌹
+        <span class="name">Abby</span>, you just made my day. <br/>
+        Happy Valentine’s Day! 🌹
       </p>
-      <p class="tiny">Screenshot this and send it to me 😉</p>
+      <p class="hint">Take a screenshot and send it to me 😉</p>
       <div class="actions">
-        <button class="yes" id="againBtn">Replay 💘</button>
+        <button class="yes" id="replayBtn">Replay 💘</button>
       </div>
     </div>
   </div>
 
   <script>
-    const herName = document.getElementById('herName');
-    const herNamePreview = document.getElementById('herNamePreview');
-    const herNameSuccess = document.getElementById('herNameSuccess');
-
     const askCard = document.getElementById('askCard');
     const successCard = document.getElementById('successCard');
 
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
-    const againBtn = document.getElementById('againBtn');
+    const replayBtn = document.getElementById('replayBtn');
 
-    function setName(){
-      const name = (herName.value || '').trim();
-      const pretty = name ? name : 'my love';
-      herNamePreview.textContent = pretty;
-      herNameSuccess.textContent = pretty;
-    }
-    herName.addEventListener('input', setName);
-    setName();
-
-    // Floating hearts generator
-    function spawnHearts(count = 18){
+    // Hearts
+    function spawnHearts(count = 16){
       const emojis = ["💖","💘","💗","💓","💞","🌹","✨"];
       for(let i=0;i<count;i++){
         const el = document.createElement('div');
         el.className = 'heart';
         el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
         el.style.left = Math.random()*100 + 'vw';
-        el.style.bottom = (-10 - Math.random()*20) + 'vh';
-        el.style.fontSize = (14 + Math.random()*22) + 'px';
-        el.style.setProperty('--drift', (Math.random()*120 - 60) + 'px');
-        el.style.animationDuration = (3.8 + Math.random()*3.2) + 's';
+        el.style.bottom = (-10 - Math.random()*25) + 'vh';
+        el.style.fontSize = (14 + Math.random()*24) + 'px';
+        el.style.setProperty('--drift', (Math.random()*140 - 70) + 'px');
+        el.style.animationDuration = (3.6 + Math.random()*3.4) + 's';
         document.body.appendChild(el);
-        setTimeout(() => el.remove(), 8000);
+        setTimeout(() => el.remove(), 9000);
       }
     }
+    setInterval(() => spawnHearts(2), 1200);
 
-    // Make "No" button run away playfully
-    function moveNoButton(){
-      const padding = 16;
+    // --- Runaway logic: keeps distance from cursor/touch and cannot be clicked ---
+    let armed = false; // when true, the button is positioned fixed and will flee
+    let lastMove = 0;
+
+    function armRunaway(){
+      if (armed) return;
+      armed = true;
+      // Switch to fixed positioning so it can run anywhere
+      noBtn.style.position = 'fixed';
+      const r = noBtn.getBoundingClientRect();
+      // start it where it currently sits
+      noBtn.style.left = (r.left) + 'px';
+      noBtn.style.top = (r.top) + 'px';
+      noBtn.style.zIndex = 9999;
+    }
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function moveAwayFrom(x, y){
+      const now = Date.now();
+      if (now - lastMove < 40) return; // throttle
+      lastMove = now;
+
+      armRunaway();
+
+      const padding = 12;
       const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
       const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
-      const btnRect = noBtn.getBoundingClientRect();
-      const maxX = vw - btnRect.width - padding;
-      const maxY = vh - btnRect.height - padding;
+      const rect = noBtn.getBoundingClientRect();
+      const bx = rect.left + rect.width / 2;
+      const by = rect.top + rect.height / 2;
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const dx = bx - x;
+      const dy = by - y;
+      const dist = Math.max(1, Math.hypot(dx, dy));
 
-      noBtn.style.position = 'fixed';
-      noBtn.style.left = x + 'px';
-      noBtn.style.top = y + 'px';
-      noBtn.style.zIndex = 9999;
+      // If cursor is close, push it away harder
+      const scareRadius = 180;
+      const strength = dist < scareRadius ? (scareRadius - dist) / scareRadius : 0;
 
-      // tiny hearts when it escapes
-      spawnHearts(6);
+      // Move direction away from cursor
+      const ux = dx / dist;
+      const uy = dy / dist;
+
+      // Step size scales with closeness
+      const step = 40 + 120 * strength;
+
+      let newLeft = rect.left + ux * step;
+      let newTop  = rect.top  + uy * step;
+
+      // Add a bit of randomness so it feels playful
+      newLeft += (Math.random()*20 - 10);
+      newTop  += (Math.random()*20 - 10);
+
+      // Keep within screen
+      newLeft = clamp(newLeft, padding, vw - rect.width - padding);
+      newTop  = clamp(newTop, padding, vh - rect.height - padding);
+
+      noBtn.style.left = newLeft + 'px';
+      noBtn.style.top  = newTop + 'px';
+
+      spawnHearts(4);
     }
 
-    // Different triggers for desktop/mobile
-    noBtn.addEventListener('mouseenter', moveNoButton);
-    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); }, {passive:false});
-    noBtn.addEventListener('click', moveNoButton);
+    // Desktop: flee from cursor movement near it
+    document.addEventListener('mousemove', (e) => {
+      const rect = noBtn.getBoundingClientRect();
+      const cx = rect.left + rect.width/2;
+      const cy = rect.top + rect.height/2;
+      const d = Math.hypot(e.clientX - cx, e.clientY - cy);
 
+      // If the mouse gets within range, run
+      if (d < 220) moveAwayFrom(e.clientX, e.clientY);
+    });
+
+    // Mobile: flee from touch (any touch near it)
+    document.addEventListener('touchstart', (e) => {
+      if (!e.touches || e.touches.length === 0) return;
+      const t = e.touches[0];
+      moveAwayFrom(t.clientX, t.clientY);
+    }, {passive:true});
+
+    // Make "No" impossible to click: intercept click/tap and run away
+    noBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const rect = noBtn.getBoundingClientRect();
+      moveAwayFrom(rect.left, rect.top);
+      return false;
+    });
+
+    // YES flow
     yesBtn.addEventListener('click', () => {
-      spawnHearts(40);
+      spawnHearts(50);
       askCard.style.display = 'none';
       successCard.style.display = 'block';
     });
 
-    againBtn.addEventListener('click', () => {
+    replayBtn.addEventListener('click', () => {
       successCard.style.display = 'none';
       askCard.style.display = 'block';
-      // reset no button position
+
+      // reset no button back near original flow
       noBtn.style.position = 'relative';
       noBtn.style.left = '';
       noBtn.style.top = '';
-      spawnHearts(12);
-    });
+      noBtn.style.zIndex = '';
+      armed = false;
 
-    // ambient hearts
-    setInterval(() => spawnHearts(2), 1200);
+      spawnHearts(18);
+    });
   </script>
 </body>
 </html>
-
