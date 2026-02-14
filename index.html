@@ -32,7 +32,6 @@
       justify-content:center;
     }
 
-    /* cinematic vignette */
     body:before{
       content:"";
       position:fixed;
@@ -42,7 +41,6 @@
       filter: blur(2px);
     }
 
-    /* floating hearts */
     .heart{
       position: fixed;
       bottom:-60px;
@@ -171,14 +169,17 @@
     }
     #yesBtn:hover{ transform: translateY(-2px) scale(1.02); filter: brightness(1.05);}
 
+    /* No button stays within the buttons area */
     #noBtn{
       color: rgba(0,0,0,0.82);
       background: rgba(255,255,255,0.85);
       box-shadow: 0 18px 40px rgba(0,0,0,0.25);
       position:absolute;
-      left: 56%;
-      top: 0px;
       min-width: 160px;
+      left: 52%;
+      top: 0px;
+      z-index: 2;
+      touch-action: none;
     }
     #noBtn:hover{ transform: translateY(-2px); }
 
@@ -189,7 +190,6 @@
       font-size: 13px;
     }
 
-    /* dramatic ending overlay */
     .overlay{
       position:fixed;
       inset:0;
@@ -280,12 +280,12 @@
 <body>
 
   <div class="card" id="mainCard">
-    <div class="badge">🎬 <span>Tonight’s Feature:</span> <span style="color:rgba(255,255,255,0.95)">A Question With Only One Ending</span></div>
+    <div class="badge">💬 <span>For Abby</span> <span style="opacity:.9">— quick question</span></div>
 
     <h1>Abby, will you be my Valentine? 💘</h1>
     <div class="subtitle">
-      I made this little page just for you. Not for the world. Not for anyone else. <b>Just you.</b> 💞<br/>
-      One question only… and honestly… my heart already knows the answer.
+      I made this page for you because I wanted to ask properly.<br/>
+      No big speech. Just a simple question.
     </div>
 
     <div class="scene">
@@ -293,70 +293,70 @@
 
       <div class="meterWrap">
         <div class="meterLabel">
-          <span>Pressure on the “No” button</span>
+          <span>How hard “No” is to press</span>
           <span id="meterPct">8%</span>
         </div>
         <div class="meter"><div id="meterBar"></div></div>
       </div>
     </div>
 
-    <div class="buttons">
+    <div class="buttons" id="buttonsArea">
       <button id="yesBtn" onclick="sayYes()">Yes 💖</button>
       <button id="noBtn">No 😄</button>
     </div>
 
-    <div class="hint" id="hint">Try pressing “No”… if you can 😄</div>
+    <div class="hint" id="hint">Try pressing “No”… 😄</div>
   </div>
 
   <div class="overlay" id="overlay">
     <div class="finalCard">
       <div class="sparkles">✨💖✨</div>
-      <div class="finalTitle">SHE SAID YES!!! 💘</div>
+      <div class="finalTitle">Okay. That’s a yes. 💘</div>
       <div class="finalText">
-        The universe just got a little brighter.<br/>
-        Abby, you just made my heart do backflips. 💞
+        Thank you — seriously.<br/>
+        I’m looking forward to Valentine’s Day with you.
       </div>
       <div class="smallRow">
-        <div class="chip">🌹 Valentine secured</div>
-        <div class="chip">🥰 Happiness: 100%</div>
-        <div class="chip">🎉 Celebration mode</div>
+        <div class="chip">🌹 Abby = Valentine</div>
+        <div class="chip">🥰 Mood: excellent</div>
+        <div class="chip">🎉 Plan something nice</div>
       </div>
-      <div class="footerNote">P.S. This page is legally incapable of accepting “No”. 😄</div>
+      <div class="footerNote">P.S. I’ll still let you pretend “No” was an option. 😄</div>
     </div>
   </div>
 
 <script>
-  // --- Typewriter intro (dramatic)
+  // Typewriter (less cheesy, more direct)
   const lines = [
-    "📜 A message for Abby…",
+    "Abby,",
     "",
-    "In a world full of ordinary pages…",
-    "…I made this one just for you.",
+    "I like spending time with you.",
+    "I like our conversations.",
+    "And I like the way things feel when it’s us.",
     "",
-    "There is only one question.",
-    "And one correct answer. 💞",
-    "",
-    "Now choose wisely… 😄"
+    "So I’m asking properly:",
+    "Will you be my Valentine?"
   ];
 
   const typeEl = document.getElementById("typeText");
-  let i = 0, j = 0, current = "";
+  let i = 0, j = 0;
+
   function typeWriter(){
     if(i >= lines.length) return;
     const line = lines[i];
     if(j <= line.length){
-      current = line.slice(0, j);
-      typeEl.textContent = lines.slice(0, i).join("\n") + (i ? "\n" : "") + current;
+      const textSoFar = lines.slice(0, i).join("\\n") + (i ? "\\n" : "") + line.slice(0, j);
+      typeEl.textContent = textSoFar;
       j++;
-      setTimeout(typeWriter, 28);
+      setTimeout(typeWriter, 22);
     } else {
       i++; j = 0;
-      setTimeout(typeWriter, 220);
+      setTimeout(typeWriter, 180);
     }
   }
   typeWriter();
 
-  // --- Floating hearts generator
+  // Floating hearts
   function spawnHeart(){
     const h = document.createElement("div");
     h.className = "heart";
@@ -370,12 +370,13 @@
   }
   setInterval(spawnHeart, 420);
 
-  // --- NO button drama mechanics
+  // No button stays visible + stays within the buttons area
   const noBtn = document.getElementById("noBtn");
   const hint = document.getElementById("hint");
   const meterBar = document.getElementById("meterBar");
   const meterPct = document.getElementById("meterPct");
   const yesBtn = document.getElementById("yesBtn");
+  const buttonsArea = document.getElementById("buttonsArea");
 
   let dodges = 0;
   let meter = 8;
@@ -385,79 +386,70 @@
   function moveNoButton(){
     dodges++;
 
-    // Increase "pressure"
-    meter = clamp(meter + 11, 8, 100);
+    // pressure meter
+    meter = clamp(meter + 10, 8, 100);
     meterBar.style.width = meter + "%";
     meterPct.textContent = meter + "%";
 
-    // Make YES button grow slightly (dramatic inevitability)
-    const scale = 1 + Math.min(dodges * 0.05, 0.6);
+    // YES grows slightly but not ridiculous
+    const scale = 1 + Math.min(dodges * 0.035, 0.35);
     yesBtn.style.transform = `translateY(-2px) scale(${scale})`;
 
-    // Update hint text
+    // hints (not cheesy)
     const hints = [
-      "Not so fast 😄",
-      "Nice try 😏",
-      "Oh you thought! 💘",
-      "The ‘No’ button refuses your refusal 😂",
-      "Plot twist: ‘No’ is unavailable 😌",
-      "Your cursor is too slow for destiny ✨",
-      "The universe says: try again 💞"
+      "Nice try 😄",
+      "Not happening 😂",
+      "Be serious.",
+      "You’re making this easy for yourself.",
+      "Come on now 😏",
+      "No is being difficult today."
     ];
     hint.textContent = hints[Math.floor(Math.random()*hints.length)];
 
-    // Jump position
-    const padding = 18;
+    // move within the buttons area so it stays visible
+    const area = buttonsArea.getBoundingClientRect();
     const btnW = noBtn.offsetWidth || 160;
     const btnH = noBtn.offsetHeight || 48;
+    const pad = 8;
 
-    const x = Math.random() * (window.innerWidth - btnW - padding*2) + padding;
-    const y = Math.random() * (window.innerHeight - btnH - padding*2) + padding;
+    const maxX = area.width - btnW - pad;
+    const maxY = area.height - btnH - pad;
+
+    const x = clamp(Math.random() * maxX, pad, maxX);
+    const y = clamp(Math.random() * maxY, 0, maxY);
 
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 
-    // Occasionally shrink the "No" button (more drama)
-    const shrink = Math.max(0.55, 1 - dodges * 0.06);
+    // keep it readable: do NOT shrink too much
+    const shrink = Math.max(0.82, 1 - dodges * 0.03);
     noBtn.style.transform = `scale(${shrink})`;
 
-    // If they "insist" too much, auto-win by destiny
-    if(dodges >= 10){
-      hint.textContent = "Okay okay… destiny has decided. 😄💞";
+    // if too many attempts, auto-yes (optional)
+    if(dodges >= 12){
+      hint.textContent = "Alright… you’ve tried enough 😄";
       setTimeout(sayYes, 600);
     }
   }
 
-  // Move on hover + on touch/click attempt
   noBtn.addEventListener("mouseenter", moveNoButton);
   noBtn.addEventListener("mousedown", moveNoButton);
   noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNoButton(); }, {passive:false});
 
-  // Start NO button in a nice spot on load (and on resize keep it visible)
-  function placeNoInitial(){
-    noBtn.style.left = "56%";
+  // Keep No button inside area on resize
+  window.addEventListener("resize", () => {
+    noBtn.style.left = "52%";
     noBtn.style.top = "0px";
-  }
-  placeNoInitial();
-  window.addEventListener("resize", ()=> {
-    // keep in bounds if resized
-    const rect = noBtn.getBoundingClientRect();
-    const pad = 12;
-    const x = clamp(rect.left, pad, window.innerWidth - rect.width - pad);
-    const y = clamp(rect.top, pad, window.innerHeight - rect.height - pad);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
   });
 
-  // --- Confetti (simple)
-  function confettiBurst(count=120){
+  // Confetti
+  function confettiBurst(count=140){
     for(let k=0;k<count;k++){
       const c = document.createElement("div");
       c.className = "confetti";
       c.style.left = (Math.random()*100) + "vw";
       c.style.animationDuration = (2.2 + Math.random()*2.2) + "s";
       c.style.transform = `rotate(${Math.random()*360}deg)`;
-      // random pastel-ish via hsl
       const hue = Math.floor(Math.random()*360);
       c.style.background = `hsl(${hue} 95% 70%)`;
       c.style.width = (6 + Math.random()*8) + "px";
@@ -467,15 +459,12 @@
     }
   }
 
-  // --- YES ending
   function sayYes(){
     document.getElementById("overlay").classList.add("show");
     confettiBurst(160);
-    // extra bursts for drama
     setTimeout(()=>confettiBurst(120), 500);
     setTimeout(()=>confettiBurst(120), 950);
   }
 </script>
 </body>
 </html>
-
