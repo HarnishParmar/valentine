@@ -345,7 +345,7 @@
     if(i >= lines.length) return;
     const line = lines[i];
     if(j <= line.length){
-      const textSoFar = lines.slice(0, i).join("\\n") + (i ? "\\n" : "") + line.slice(0, j);
+      const textSoFar = lines.slice(0, i).join("\n") + (i ? "\n" : "") + line.slice(0, j);
       typeEl.textContent = textSoFar;
       j++;
       setTimeout(typeWriter, 22);
@@ -461,3 +461,4 @@
 </script>
 </body>
 </html>
+
