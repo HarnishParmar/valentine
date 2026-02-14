@@ -169,7 +169,6 @@
     }
     #yesBtn:hover{ transform: translateY(-2px) scale(1.02); filter: brightness(1.05);}
 
-    /* No button stays within the buttons area */
     #noBtn{
       color: rgba(0,0,0,0.82);
       background: rgba(255,255,255,0.85);
@@ -280,12 +279,12 @@
 <body>
 
   <div class="card" id="mainCard">
-    <div class="badge">💬 <span>For Abby</span> <span style="opacity:.9">— quick question</span></div>
+    <div class="badge">💬 <span>For Abby</span> <span style="opacity:.9">— 3 years and counting</span></div>
 
-    <h1>Abby, will you be my Valentine? 💘</h1>
+    <h1>Abby, will you be my Valentine again? 💘</h1>
     <div class="subtitle">
-      I made this page for you because I wanted to ask properly.<br/>
-      No big speech. Just a simple question.
+      Three years in, and I still like doing life with you.<br/>
+      No big speech — just something small I made because you matter to me.
     </div>
 
     <div class="scene">
@@ -311,28 +310,31 @@
   <div class="overlay" id="overlay">
     <div class="finalCard">
       <div class="sparkles">✨💖✨</div>
-      <div class="finalTitle">Okay. That’s a yes. 💘</div>
+      <div class="finalTitle">Still choosing you. 💘</div>
       <div class="finalText">
-        Thank you — seriously.<br/>
-        I’m looking forward to Valentine’s Day with you.
+        Three years in — and I’d choose you again.<br/>
+        Let’s make this Valentine’s a good one.
       </div>
       <div class="smallRow">
-        <div class="chip">🌹 Abby = Valentine</div>
-        <div class="chip">🥰 Mood: excellent</div>
+        <div class="chip">🌹 Valentine secured</div>
+        <div class="chip">🥰 3 years strong</div>
         <div class="chip">🎉 Plan something nice</div>
       </div>
-      <div class="footerNote">P.S. I’ll still let you pretend “No” was an option. 😄</div>
+      <div class="footerNote">P.S. “No” was never going to be easy. 😄</div>
     </div>
   </div>
 
 <script>
-  // Typewriter (less cheesy, more direct)
+  // Typewriter (3 years, not first time, not cheesy)
   const lines = [
-    "Abby,I like spending time with you.",
-    "I like our conversations.",
-    "And I like the way things feel when it’s us.",
+    "Abby,",
     "",
-    "So I’m asking properly:",
+    "Three years.",
+    "We’ve built something real.",
+    "",
+    "This isn’t about starting anything.",
+    "It’s just me choosing you again.",
+    "",
     "Will you be my Valentine?"
   ];
 
@@ -349,7 +351,7 @@
       setTimeout(typeWriter, 22);
     } else {
       i++; j = 0;
-      setTimeout(typeWriter, 180);
+      setTimeout(typeWriter, 170);
     }
   }
   typeWriter();
@@ -368,7 +370,7 @@
   }
   setInterval(spawnHeart, 420);
 
-  // No button stays visible + stays within the buttons area
+  // No button stays visible and stays inside the buttons area
   const noBtn = document.getElementById("noBtn");
   const hint = document.getElementById("hint");
   const meterBar = document.getElementById("meterBar");
@@ -384,27 +386,23 @@
   function moveNoButton(){
     dodges++;
 
-    // pressure meter
     meter = clamp(meter + 10, 8, 100);
     meterBar.style.width = meter + "%";
     meterPct.textContent = meter + "%";
 
-    // YES grows slightly but not ridiculous
     const scale = 1 + Math.min(dodges * 0.035, 0.35);
     yesBtn.style.transform = `translateY(-2px) scale(${scale})`;
 
-    // hints (not cheesy)
     const hints = [
-      "Nice try 😄",
+      "After 3 years? 😄",
+      "Nice try.",
       "Not happening 😂",
-      "Be serious.",
-      "You’re making this easy for yourself.",
-      "Come on now 😏",
-      "No is being difficult today."
+      "Be serious 😏",
+      "You know the answer.",
+      "Okay, try again."
     ];
     hint.textContent = hints[Math.floor(Math.random()*hints.length)];
 
-    // move within the buttons area so it stays visible
     const area = buttonsArea.getBoundingClientRect();
     const btnW = noBtn.offsetWidth || 160;
     const btnH = noBtn.offsetHeight || 48;
@@ -419,13 +417,11 @@
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
 
-    // keep it readable: do NOT shrink too much
     const shrink = Math.max(0.82, 1 - dodges * 0.03);
     noBtn.style.transform = `scale(${shrink})`;
 
-    // if too many attempts, auto-yes (optional)
     if(dodges >= 12){
-      hint.textContent = "Alright… you’ve tried enough 😄";
+      hint.textContent = "Alright… enough 😄";
       setTimeout(sayYes, 600);
     }
   }
@@ -434,7 +430,6 @@
   noBtn.addEventListener("mousedown", moveNoButton);
   noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNoButton(); }, {passive:false});
 
-  // Keep No button inside area on resize
   window.addEventListener("resize", () => {
     noBtn.style.left = "52%";
     noBtn.style.top = "0px";
@@ -466,4 +461,3 @@
 </script>
 </body>
 </html>
-
