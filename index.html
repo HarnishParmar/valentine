@@ -1,130 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Will You Be My Valentine? 💘</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abby, be my Valentine 💘</title>
+  <style>
+    :root{
+      --bg1:#0b0014;
+      --bg2:#3a003f;
+      --pink:#ff4d8d;
+      --pink2:#ff1e6a;
+      --card: rgba(255,255,255,0.10);
+      --card2: rgba(255,255,255,0.06);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.75);
+      --shadow: 0 20px 80px rgba(0,0,0,0.55);
+    }
 
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-            max-width: 400px;
-        }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      height:100vh;
+      overflow:hidden;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 30% 20%, #5c0070 0%, transparent 55%),
+                  radial-gradient(900px 700px at 80% 70%, #b3005a 0%, transparent 50%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
 
-        h1 {
-            color: #ff4d6d;
-            margin-bottom: 10px;
-        }
+    /* cinematic vignette */
+    body:before{
+      content:"";
+      position:fixed;
+      inset:-50px;
+      background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.55) 80%);
+      pointer-events:none;
+      filter: blur(2px);
+    }
 
-        p {
-            color: #555;
-            font-size: 18px;
-        }
+    /* floating hearts */
+    .heart{
+      position: fixed;
+      bottom:-60px;
+      font-size: 22px;
+      opacity:0.75;
+      animation: floatUp linear infinite;
+      pointer-events:none;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.35));
+    }
+    @keyframes floatUp{
+      0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0.0;}
+      10%{opacity:0.75;}
+      100%{ transform: translateY(-120vh) translateX(40px) rotate(25deg); opacity:0;}
+    }
 
-        .buttons {
-            margin-top: 25px;
-            position: relative;
-        }
+    .card{
+      width:min(680px, 92vw);
+      padding:28px 26px 22px;
+      border-radius:28px;
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      position:relative;
+    }
 
-        button {
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
-            margin: 10px;
-            transition: 0.3s;
-        }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 14px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.14);
+      font-weight:600;
+      letter-spacing:0.2px;
+      color:var(--muted);
+    }
 
-        #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-        }
+    h1{
+      margin:16px 0 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing:-0.6px;
+    }
 
-        #yesBtn:hover {
-            background-color: #ff1e4d;
-        }
+    .subtitle{
+      margin: 10px auto 0;
+      font-size: clamp(16px, 2.2vw, 18px);
+      color: var(--muted);
+      line-height:1.5;
+      max-width: 56ch;
+    }
 
-        #noBtn {
-            background-color: #ccc;
-            color: black;
-            position: absolute;
-        }
+    .scene{
+      margin-top:18px;
+      padding:16px 16px 10px;
+      border-radius:18px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
 
-        .heart {
-            font-size: 40px;
-            animation: float 2s infinite ease-in-out;
-        }
+    .type{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New";
+      color: rgba(255,255,255,0.86);
+      font-size: 14px;
+      line-height:1.6;
+      margin:0;
+      white-space: pre-wrap;
+    }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-    </style>
+    .meterWrap{
+      margin:14px 0 6px;
+    }
+    .meterLabel{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      color: rgba(255,255,255,0.75);
+      margin-bottom:8px;
+    }
+    .meter{
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .meter > div{
+      height:100%;
+      width: 8%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--pink), #ffb3d1);
+      box-shadow: 0 0 25px rgba(255,77,141,0.45);
+      transition: width 320ms ease;
+    }
+
+    .buttons{
+      margin-top: 18px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      position:relative;
+      min-height:64px;
+    }
+
+    button{
+      border:none;
+      cursor:pointer;
+      padding: 14px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing:0.2px;
+      transition: transform 120ms ease, filter 180ms ease, opacity 180ms ease;
+      user-select:none;
+    }
+
+    #yesBtn{
+      color:white;
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      box-shadow: 0 18px 40px rgba(255,30,106,0.35);
+      min-width: 180px;
+    }
+    #yesBtn:hover{ transform: translateY(-2px) scale(1.02); filter: brightness(1.05);}
+
+    #noBtn{
+      color: rgba(0,0,0,0.82);
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      position:absolute;
+      left: 56%;
+      top: 0px;
+      min-width: 160px;
+    }
+    #noBtn:hover{ transform: translateY(-2px); }
+
+    .hint{
+      margin-top: 10px;
+      text-align:center;
+      color: rgba(255,255,255,0.72);
+      font-size: 13px;
+    }
+
+    /* dramatic ending overlay */
+    .overlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(800px 600px at 50% 40%, rgba(255,77,141,0.25) 0%, rgba(0,0,0,0.85) 65%),
+                  rgba(0,0,0,0.55);
+      z-index: 50;
+    }
+    .overlay.show{ display:flex; animation: fadeIn 450ms ease;}
+    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+
+    .finalCard{
+      width:min(820px, 92vw);
+      border-radius: 30px;
+      padding: 28px 26px;
+      text-align:center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 30px 120px rgba(0,0,0,0.65);
+      backdrop-filter: blur(10px);
+      transform: translateY(6px);
+    }
+
+    .finalTitle{
+      margin: 10px 0 8px;
+      font-size: clamp(30px, 5vw, 56px);
+      line-height:1.02;
+    }
+    .finalText{
+      margin: 0 auto 18px;
+      max-width: 60ch;
+      color: rgba(255,255,255,0.82);
+      font-size: clamp(16px, 2.4vw, 20px);
+      line-height:1.6;
+    }
+
+    .sparkles{
+      font-size: 34px;
+      filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+      animation: pop 900ms ease-in-out infinite;
+    }
+    @keyframes pop{
+      0%,100%{transform: translateY(0) scale(1)}
+      50%{transform: translateY(-6px) scale(1.05)}
+    }
+
+    .confetti{
+      position:fixed;
+      top:-20px;
+      width:10px;
+      height:16px;
+      border-radius:2px;
+      opacity:0.9;
+      animation: fall linear forwards;
+      z-index: 60;
+      pointer-events:none;
+    }
+    @keyframes fall{
+      to{ transform: translateY(120vh) rotate(520deg); opacity:0.95; }
+    }
+
+    .smallRow{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    .chip{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.85);
+      font-weight:700;
+      font-size: 14px;
+    }
+
+    .footerNote{
+      margin-top: 14px;
+      color: rgba(255,255,255,0.65);
+      font-size: 12px;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="heart">💘</div>
-    <h1>Abby, will you be my Valentine?</h1>
-    <p>
-        I made this little page just for you. 💞<br>
-        One question only…
-    </p>
+  <div class="card" id="mainCard">
+    <div class="badge">🎬 <span>Tonight’s Feature:</span> <span style="color:rgba(255,255,255,0.95)">A Question With Only One Ending</span></div>
+
+    <h1>Abby, will you be my Valentine? 💘</h1>
+    <div class="subtitle">
+      I made this little page just for you. Not for the world. Not for anyone else. <b>Just you.</b> 💞<br/>
+      One question only… and honestly… my heart already knows the answer.
+    </div>
+
+    <div class="scene">
+      <p class="type" id="typeText"></p>
+
+      <div class="meterWrap">
+        <div class="meterLabel">
+          <span>Pressure on the “No” button</span>
+          <span id="meterPct">8%</span>
+        </div>
+        <div class="meter"><div id="meterBar"></div></div>
+      </div>
+    </div>
 
     <div class="buttons">
-        <button id="yesBtn" onclick="sayYes()">Yes 💖</button>
-        <button id="noBtn" onmouseover="moveButton()">No 😄</button>
+      <button id="yesBtn" onclick="sayYes()">Yes 💖</button>
+      <button id="noBtn">No 😄</button>
     </div>
-</div>
+
+    <div class="hint" id="hint">Try pressing “No”… if you can 😄</div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="finalCard">
+      <div class="sparkles">✨💖✨</div>
+      <div class="finalTitle">SHE SAID YES!!! 💘</div>
+      <div class="finalText">
+        The universe just got a little brighter.<br/>
+        Abby, you just made my heart do backflips. 💞
+      </div>
+      <div class="smallRow">
+        <div class="chip">🌹 Valentine secured</div>
+        <div class="chip">🥰 Happiness: 100%</div>
+        <div class="chip">🎉 Celebration mode</div>
+      </div>
+      <div class="footerNote">P.S. This page is legally incapable of accepting “No”. 😄</div>
+    </div>
+  </div>
 
 <script>
-    function sayYes() {
-        document.body.innerHTML = `
-            <div style="
-                display:flex;
-                justify-content:center;
-                align-items:center;
-                height:100vh;
-                background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-                font-family:'Segoe UI',sans-serif;
-                text-align:center;
-                flex-direction:column;
-            ">
-                <h1 style="color:white;font-size:40px;">
-                    YAYYY!!! 💖💖💖
-                </h1>
-                <p style="color:white;font-size:22px;">
-                    You just made me the happiest person alive! 💞✨
-                </p>
-            </div>
-        `;
-    }
+  // --- Typewriter intro (dramatic)
+  const lines = [
+    "📜 A message for Abby…",
+    "",
+    "In a world full of ordinary pages…",
+    "…I made this one just for you.",
+    "",
+    "There is only one question.",
+    "And one correct answer. 💞",
+    "",
+    "Now choose wisely… 😄"
+  ];
 
-    function moveButton() {
-        const button = document.getElementById("noBtn");
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 50);
-
-        button.style.left = x + "px";
-        button.style.top = y + "px";
+  const typeEl = document.getElementById("typeText");
+  let i = 0, j = 0, current = "";
+  function typeWriter(){
+    if(i >= lines.length) return;
+    const line = lines[i];
+    if(j <= line.length){
+      current = line.slice(0, j);
+      typeEl.textContent = lines.slice(0, i).join("\n") + (i ? "\n" : "") + current;
+      j++;
+      setTimeout(typeWriter, 28);
+    } else {
+      i++; j = 0;
+      setTimeout(typeWriter, 220);
     }
+  }
+  typeWriter();
+
+  // --- Floating hearts generator
+  function spawnHeart(){
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = Math.random() > 0.5 ? "💗" : "💘";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.fontSize = (18 + Math.random() * 26) + "px";
+    h.style.animationDuration = (5 + Math.random() * 5) + "s";
+    h.style.opacity = (0.35 + Math.random() * 0.5).toFixed(2);
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(), 11000);
+  }
+  setInterval(spawnHeart, 420);
+
+  // --- NO button drama mechanics
+  const noBtn = document.getElementById("noBtn");
+  const hint = document.getElementById("hint");
+  const meterBar = document.getElementById("meterBar");
+  const meterPct = document.getElementById("meterPct");
+  const yesBtn = document.getElementById("yesBtn");
+
+  let dodges = 0;
+  let meter = 8;
+
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+  function moveNoButton(){
+    dodges++;
+
+    // Increase "pressure"
+    meter = clamp(meter + 11, 8, 100);
+    meterBar.style.width = meter + "%";
+    meterPct.textContent = meter + "%";
+
+    // Make YES button grow slightly (dramatic inevitability)
+    const scale = 1 + Math.min(dodges * 0.05, 0.6);
+    yesBtn.style.transform = `translateY(-2px) scale(${scale})`;
+
+    // Update hint text
+    const hints = [
+      "Not so fast 😄",
+      "Nice try 😏",
+      "Oh you thought! 💘",
+      "The ‘No’ button refuses your refusal 😂",
+      "Plot twist: ‘No’ is unavailable 😌",
+      "Your cursor is too slow for destiny ✨",
+      "The universe says: try again 💞"
+    ];
+    hint.textContent = hints[Math.floor(Math.random()*hints.length)];
+
+    // Jump position
+    const padding = 18;
+    const btnW = noBtn.offsetWidth || 160;
+    const btnH = noBtn.offsetHeight || 48;
+
+    const x = Math.random() * (window.innerWidth - btnW - padding*2) + padding;
+    const y = Math.random() * (window.innerHeight - btnH - padding*2) + padding;
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+
+    // Occasionally shrink the "No" button (more drama)
+    const shrink = Math.max(0.55, 1 - dodges * 0.06);
+    noBtn.style.transform = `scale(${shrink})`;
+
+    // If they "insist" too much, auto-win by destiny
+    if(dodges >= 10){
+      hint.textContent = "Okay okay… destiny has decided. 😄💞";
+      setTimeout(sayYes, 600);
+    }
+  }
+
+  // Move on hover + on touch/click attempt
+  noBtn.addEventListener("mouseenter", moveNoButton);
+  noBtn.addEventListener("mousedown", moveNoButton);
+  noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); moveNoButton(); }, {passive:false});
+
+  // Start NO button in a nice spot on load (and on resize keep it visible)
+  function placeNoInitial(){
+    noBtn.style.left = "56%";
+    noBtn.style.top = "0px";
+  }
+  placeNoInitial();
+  window.addEventListener("resize", ()=> {
+    // keep in bounds if resized
+    const rect = noBtn.getBoundingClientRect();
+    const pad = 12;
+    const x = clamp(rect.left, pad, window.innerWidth - rect.width - pad);
+    const y = clamp(rect.top, pad, window.innerHeight - rect.height - pad);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  });
+
+  // --- Confetti (simple)
+  function confettiBurst(count=120){
+    for(let k=0;k<count;k++){
+      const c = document.createElement("div");
+      c.className = "confetti";
+      c.style.left = (Math.random()*100) + "vw";
+      c.style.animationDuration = (2.2 + Math.random()*2.2) + "s";
+      c.style.transform = `rotate(${Math.random()*360}deg)`;
+      // random pastel-ish via hsl
+      const hue = Math.floor(Math.random()*360);
+      c.style.background = `hsl(${hue} 95% 70%)`;
+      c.style.width = (6 + Math.random()*8) + "px";
+      c.style.height = (10 + Math.random()*14) + "px";
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(), 5200);
+    }
+  }
+
+  // --- YES ending
+  function sayYes(){
+    document.getElementById("overlay").classList.add("show");
+    confettiBurst(160);
+    // extra bursts for drama
+    setTimeout(()=>confettiBurst(120), 500);
+    setTimeout(()=>confettiBurst(120), 950);
+  }
 </script>
-
 </body>
 </html>
 
